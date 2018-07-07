@@ -6,11 +6,10 @@ import random
 from math import ceil,floor
 def game(file):
     def save(*args):
-        f=open(os.getcwd()+"\Maps\%s.txt"%file,"r")
-        w=f.readlines()[0].split(";")
+        with open(os.getcwd()+"\Maps\%s.txt"%file,"r") as f:
+            w=f.readlines()[0].split(";")
         names=w[-2].replace(" ","").replace("'","")[1:-1].split(",")
         scores=w[-1].replace(" ","").replace("'","")[1:-1].split(",")
-        f.close()
         scores=[int(scores[i]) for i in range(len(scores))]
         for i in range(len(scores)):
             if SCORE>scores[i]:
@@ -20,9 +19,8 @@ def game(file):
                 scores=scores[:-1]
                 break
         scores=[str(scores[i]) for i in range(len(scores))]
-        f=open(os.getcwd()+"\Maps\%s.txt"%file,"w")
-        f.write(w[0]+";"+w[1]+";"+w[2]+";"+str(names)+";"+str(scores))
-        f.close()
+        with open(os.getcwd()+"\Maps\%s.txt"%file,"w") as f:
+            f.write(w[0]+";"+w[1]+";"+w[2]+";"+str(names)+";"+str(scores))
         top.destroy()
     class Wall(pygame.sprite.Sprite):
         def __init__(self,x,y):
@@ -76,21 +74,19 @@ def game(file):
             self.rect.centerx+=self.xvel
             self.rect.centery+=self.yvel
             self.rect.move_ip((self.xvel,self.yvel))
-
-
-    class punkt(pygame.sprite.Sprite):
+    class Point(pygame.sprite.Sprite):
         def __init__(self,x,y):
             pygame.sprite.Sprite.__init__(self)
             self.image=s_point
             self.rect = self.image.get_rect()
             self.rect.center = (x+RES/2,y+RES/2)
-    class specjal(pygame.sprite.Sprite):
+    class Special(pygame.sprite.Sprite):
         def __init__(self,x,y):
             pygame.sprite.Sprite.__init__(self)
             self.image=s_special
             self.rect = self.image.get_rect()
             self.rect.center = (x+RES/2,y+RES/2)
-    class heart(pygame.sprite.Sprite):
+    class Heart(pygame.sprite.Sprite):
         def __init__(self,x,y):
             pygame.sprite.Sprite.__init__(self)
             self.image=s_heart
@@ -110,9 +106,8 @@ def game(file):
             self.image = self.font.render(self.text,1,WHITE)
             self.rect = self.image.get_rect()
             self.rect.center = (self.rect.size[0]/2,SIZE[1]-16)
-    f=open(os.getcwd()+"\Maps\%s.txt"%file,"r")
-    w=f.readlines()[0].split(";")[:3]
-    f.close()
+    with open(os.getcwd()+"\Maps\%s.txt"%file,"r") as f:
+        w=f.readlines()[0].split(";")[:3]
     ROWS=int(w[0])
     COLS=int(w[1])
     MAP=w[2][1:-1].replace(' ','').split(',')
@@ -148,9 +143,9 @@ def game(file):
     player_sprite=pygame.sprite.RenderClear()
     specials=pygame.sprite.RenderClear()
     hearts=pygame.sprite.RenderClear()
-    hearts.add(heart(SIZE[0]-40,SIZE[1]-8))
-    hearts.add(heart(SIZE[0]-24,SIZE[1]-8))
-    hearts.add(heart(SIZE[0]-8,SIZE[1]-8))
+    hearts.add(Heart(SIZE[0]-40,SIZE[1]-8))
+    hearts.add(Heart(SIZE[0]-24,SIZE[1]-8))
+    hearts.add(Heart(SIZE[0]-8,SIZE[1]-8))
     scoreboard = pygame.sprite.RenderClear()
     scoreboard.add(ScoreBoard())
     scoreboard.draw(screen)
@@ -160,9 +155,9 @@ def game(file):
             if MAP[i+j*ROWS]=='1':
                 walls.add(Wall(i*16,j*16))
             elif MAP[i+j*ROWS]=='2':
-                points.add(punkt(i*16,j*16))
+                points.add(Point(i*16,j*16))
             elif MAP[i+j*ROWS]=='3':
-                specials.add(specjal(i*16,j*16))
+                specials.add(Special(i*16,j*16))
             elif MAP[i+j*ROWS]=='4':
                 blinky=Ghost(i*16,j*16,s_blinky)
                 ghosts.add(blinky)
@@ -278,7 +273,6 @@ def game(file):
         ghosts.draw(screen)
         player_sprite.draw(screen) 
         hearts.draw(screen) 
-
     pygame.quit()
     top=tk.Tk() 
     top.title("Save results")
@@ -295,7 +289,6 @@ def game(file):
     b_save=tk.Button(frame,text="Save",command=save)
     b_save.grid(column=2, row =3)
     top.mainloop()
-    
     return 1
 if __name__=="__main__":
     game("level1")

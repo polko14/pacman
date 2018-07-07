@@ -2,9 +2,8 @@ import tkinter as tk
 import os
 def mapcreator():
     def export(*args):
-        f=open(os.getcwd()+"\Maps\%s.txt"%name.get(),"w")
-        f.write(str(xsize.get())+";"+str(xsize.get())+";"+str(mapa)+";"+str(["....."]*10)+";"+str(["0"]*10))
-        f.close()
+        with open(os.getcwd()+"\Maps\%s.txt"%name.get(),"w") as f:
+            f.write(str(xsize.get())+";"+str(xsize.get())+";"+str(board)+";"+str(["....."]*10)+";"+str(["0"]*10))
     def checknr(arg,*args):
         x=0
         if(str(arg)[-1]=="n"):
@@ -28,36 +27,35 @@ def mapcreator():
             arg.config(bg = 'purple') #special point
         elif (mode.get()==4):
             arg.config(bg = 'red') #ghost1-blinky
-            inmap(mode.get())
+            onboard(mode.get())
         elif (mode.get()==5):
             arg.config(bg = 'pink') #ghost2-pinky
-            inmap(mode.get())
+            onboard(mode.get())
         elif (mode.get()==6):
             arg.config(bg = 'cyan') #ghost3-inky
-            inmap(mode.get())
+            onboard(mode.get())
         elif (mode.get()==7):
             arg.config(bg = 'orange') #ghost4-clyde
-            inmap(mode.get())
+            onboard(mode.get())
         elif (mode.get()==8):
             arg.config(bg = 'yellow') #pacman
-            inmap(mode.get())
-        mapa[x-1]=mode.get()
-
-    def inmap(n,*args):
-        if n in mapa:
-            tiles[mapa.index(n)].config(bg = 'magenta')
-            mapa[mapa.index(n)]=2
+            onboard(mode.get())
+        board[x-1]=mode.get()
+    def onboard(n,*args):
+        if n in board:
+            tiles[board.index(n)].config(bg = 'magenta')
+            board[board.index(n)]=2
     def fill(*args):
-        for i in range(len(mapa)):
-            if(mapa[i]==0):
-                mapa[i]=2
+        for i in range(len(board)):
+            if(board[i]==0):
+                board[i]=2
                 tiles[i].config(bg = 'magenta')
-    def szkic(*args):
-        global mapa
-        mapa=[0]*xsize.get()*xsize.get()
-        return mapa
+    def sketch(*args):
+        global board
+        board=[0]*xsize.get()*xsize.get()
+        return board
     def draw(*args):
-        szkic()
+        sketch()
         global tiles
         global buttons
         try:
@@ -75,7 +73,7 @@ def mapcreator():
                     tiles[i+(xsize.get())*j]=tk.Button(buttons,image=pixel,bg = 'blue')
                     tiles[i+(xsize.get())*j].config(command = lambda arg = tiles[i+(xsize.get())*j]: change(arg))
                     tiles[i+(xsize.get())*j].grid(column=i ,row = j)
-                    mapa[i+(xsize.get())*j]=1
+                    board[i+(xsize.get())*j]=1
                 else:
                     tiles[i+(xsize.get())*j]=tk.Button(buttons,image=pixel,bg = 'white')
                     tiles[i+(xsize.get())*j].config(command = lambda arg = tiles[i+(xsize.get())*j]: change(arg))
@@ -115,8 +113,8 @@ def mapcreator():
     name.set("levelname")
     mode.set(1)
 
-    l_wymiar=tk.Label(frame,text="Map size: ")
-    l_wymiar.grid(column=1,row=1)
+    l_size=tk.Label(frame,text="Map size: ")
+    l_size.grid(column=1,row=1)
 
     e_xsize=tk.Entry(frame,width=8,textvariable=xsize)
     e_xsize.grid(column=2,row = 1)
@@ -125,29 +123,29 @@ def mapcreator():
     b_draw=tk.Button(frame, text = "draw", command = draw)
     b_draw.grid(column= 5, row = 1)
 
-    b_zapisz=tk.Button(frame, text =  "save",command = export)
-    b_zapisz.grid(column=6, row = 1)
+    b_save=tk.Button(frame, text =  "save",command = export)
+    b_save.grid(column=6, row = 1)
 
-    b_sciana=tk.Button(frame,text = "wall",bg = 'blue', command = lambda: change_mode(1))
-    b_sciana.grid(column=2, row = 2)
+    b_wall=tk.Button(frame,text = "wall",bg = 'blue', command = lambda: change_mode(1))
+    b_wall.grid(column=2, row = 2)
 
-    b_punkt=tk.Button(frame,text = "point",bg = 'magenta', command = lambda: change_mode(2))
-    b_punkt.grid(column=3, row = 2)
+    b_point=tk.Button(frame,text = "point",bg = 'magenta', command = lambda: change_mode(2))
+    b_point.grid(column=3, row = 2)
 
     b_powerup=tk.Button(frame,text = "special",bg = 'purple', command = lambda: change_mode(3))
     b_powerup.grid(column=4, row = 2)
 
-    b_duch1=tk.Button(frame, text = "blinky",bg = 'red', command = lambda: change_mode(4))
-    b_duch1.grid(column=5, row = 2)
+    b_ghost1=tk.Button(frame, text = "blinky",bg = 'red', command = lambda: change_mode(4))
+    b_ghost1.grid(column=5, row = 2)
 
-    b_duch2=tk.Button(frame, text = "pinky",bg = 'pink',command = lambda: change_mode(5))
-    b_duch2.grid(column=6, row = 2)
+    b_ghost2=tk.Button(frame, text = "pinky",bg = 'pink',command = lambda: change_mode(5))
+    b_ghost2.grid(column=6, row = 2)
 
-    b_duch3=tk.Button(frame,text = "inky",bg = 'cyan', command = lambda: change_mode(6))
-    b_duch3.grid(column=7, row = 2)
+    b_ghost3=tk.Button(frame,text = "inky",bg = 'cyan', command = lambda: change_mode(6))
+    b_ghost3.grid(column=7, row = 2)
 
-    b_duch4=tk.Button(frame,text = "clyde",bg = 'orange', command = lambda: change_mode(7))
-    b_duch4.grid(column=8, row = 2)
+    b_ghost4=tk.Button(frame,text = "clyde",bg = 'orange', command = lambda: change_mode(7))
+    b_ghost4.grid(column=8, row = 2)
 
     b_pacman=tk.Button(frame,text = "pacman",bg = 'yellow', command = lambda: change_mode(8))
     b_pacman.grid(column=8, row = 1)

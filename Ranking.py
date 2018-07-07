@@ -17,11 +17,10 @@ def ranking(file):
     screen=pygame.display.set_mode(SIZE)
     pygame.display.set_caption("PacMan")
     clock=pygame.time.Clock()
-    f=open(os.getcwd()+"\Maps\%s.txt"%file,"r")
-    w=f.readlines()[0].split(";")[-2:]
-    names=w[0].replace(" ","").replace("'","")[1:-1].split(",")
-    scores=w[1].replace(" ","").replace("'","")[1:-1].split(",")
-    f.close()
+    with open(os.getcwd()+"\Maps\%s.txt"%file,"r") as f:
+        w=f.readlines()[0].split(";")[-2:]
+        names=w[0].replace(" ","").replace("'","")[1:-1].split(",")
+        scores=w[1].replace(" ","").replace("'","")[1:-1].split(",")
     while ACTIVE:
         clock.tick(60)
         for event in pygame.event.get():
