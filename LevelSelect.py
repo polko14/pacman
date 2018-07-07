@@ -5,12 +5,9 @@ from Game import *
 import os
 
 def level_select(n):
-    #Funkcja umożliwiająca wybór poziomu(n=1 wybór do gry, n=2 wybór do rankingu)
     def text_objects(text, font, color):
-        #Funkcja tworząca obiekt tekstu
         textSurface = font.render(text, True, color)
         return textSurface, textSurface.get_rect()
-    #Stałe
     SIZE=(600,600)
     BLACK=(0,0,0)
     WHITE=(255,255,255)
@@ -24,8 +21,7 @@ def level_select(n):
     pygame.display.set_caption("PacMan")
     clock=pygame.time.Clock()
     ACTIVE=True
-    #Wczytywanie nazw plików .txt zawierających dane map
-    fullPath=os.getcwd()+"\Mapy"
+    fullPath=os.getcwd()+"\Maps"
     files = [f[0:-4] for f in os.listdir(fullPath) if (os.path.isfile(os.path.join(fullPath, f)) and f[-4:]==".txt")]
     while(ACTIVE):
         clock.tick(60)
@@ -35,11 +31,11 @@ def level_select(n):
         
         screen.fill(BLACK)
         largeText = pygame.font.Font('freesansbold.ttf',60)
-        TextSurf, TextRect = text_objects("WYBIERZ POZIOM", largeText, WHITE)
+        TextSurf, TextRect = text_objects("SELECT LEVEL", largeText, WHITE)
         TextRect.center = (SIZE[0]/2,SIZE[1]/8)
         screen.blit(TextSurf, TextRect)
         pygame.draw.rect(screen,RED,(SIZE[1]/2-B_WH/2,500 + B_HT/2,B_WH,B_HT))
-        textSurf, textRect = text_objects('COFNIJ', smallText, WHITE)
+        textSurf, textRect = text_objects('BACK', smallText, WHITE)
         textRect.center = ( SIZE[1]/2,500 + B_HT)
         screen.blit(textSurf, textRect)
         mouse = pygame.mouse.get_pos()
@@ -48,18 +44,15 @@ def level_select(n):
             if SIZE[1]/2+B_WH/2 > mouse[0] > SIZE[1]/2-B_WH/2 and 500+3*B_HT/2 > mouse[1] > 500-B_HT/2:
                 ACTIVE=False
         if len(files)<=10:
-            #Wyświetlanie nazw poziom w jednej kolumnie
             TextSurf=[0]*len(files)
             TextRect=[0]*len(files)
             for i in range(len(files)):
-                #Drukowanie nazw poziomów
                 TextSurf[i], TextRect[i] = text_objects("%s"%(files[i]), smallText, WHITE)
                 TextRect[i].center = (SIZE[0]/2,SIZE[1]/8+30+(2*i+1)*20)
                 screen.blit(TextSurf[i], TextRect[i])
             if pygame.mouse.get_pressed()[2]:
                 mouse=pygame.mouse.get_pos()
                 for i in range(len(files)):
-                    #Sprawdzanie który level został wybrany
                     if (SIZE[0]/2+TextRect[i].size[0]>mouse[0]>SIZE[0]/2-TextRect[i].size[0] 
                         and SIZE[1]/8+30+(2*i+1)*20+10>mouse[1]>SIZE[1]/8+30+(2*i+1)*20-10):
                         ACTIVE=False
@@ -69,23 +62,19 @@ def level_select(n):
                         elif n==2:
                             return 4,files[i]
         elif len(files)>10 and len(files)<=20:
-            #Wyświetlanie nazw poziomów w dwóch kolumnach
             TextSurf=[0]*len(files)
             TextRect=[0]*len(files)
             for i in range(int((len(files)+1)/2)):
-                #Drukowanie nazw poziomów w pierwszej kolumnie
                 TextSurf[i], TextRect[i] = text_objects("%s"%(files[i]), smallText, WHITE)
                 TextRect[i].center = (SIZE[0]/4,SIZE[1]/8+30+(2*i+1)*20)
                 screen.blit(TextSurf[i], TextRect[i])
             for i in range(int(len(files)/2+1),len(files)):
-                #Drukowanie nazw poziomów w drugiej kolumnie
                 TextSurf[i], TextRect[i] = text_objects("%s"%(files[i]), smallText, WHITE)
                 TextRect[i].center = (SIZE[0]/4*3,SIZE[1]/8+30+(2*(i-(len(files)+1)/2)+1)*20)
                 screen.blit(TextSurf[i], TextRect[i])
             if pygame.mouse.get_pressed()[2]:
                 mouse=pygame.mouse.get_pos()
                 for i in range(len(files)):
-                    #Sprawdzanie który level został wybrany z pierwszej kolumny
                     if (SIZE[0]/4+TextRect[i].size[0]>mouse[0]>SIZE[0]/4-TextRect[i].size[0] 
                         and SIZE[1]/8+30+(2*i+1)*20+10>mouse[1]>SIZE[1]/8+30+(2*i+1)*20-10):
                         ACTIVE=False
@@ -95,7 +84,6 @@ def level_select(n):
                         else:
                             return 4,files[i]
                 for i in range(int(len(files)/2+1),len(files)):
-                    #Sprawdzanie który level został wybrany z drugiej kolumny
                     if (SIZE[0]/4*3+TextRect[i].size[0]>mouse[0]>SIZE[0]/4*3-TextRect[i].size[0] 
                         and SIZE[1]/8+30+(2*(i-(len(files)+1)/2)+1)*20+10>mouse[1]
                         and mouse[1]>SIZE[1]/8+30+(2*(i-(len(files)+1)/2)+1)*20-10):
@@ -106,12 +94,11 @@ def level_select(n):
                         else:
                             return 4,files[i]
         else:
-            #Ilość plików z mapami w folderze mapy nie może przekraczać 20
-            TextSurf, TextRect = text_objects("Zbyt wiele poziomow do wyswietlenia",
+            TextSurf, TextRect = text_objects("To many levels in /Maps folder.",
                                              smallText, WHITE)
             TextRect.center = (SIZE[0]/2,SIZE[1]/5)
             screen.blit(TextSurf, TextRect)
-            TextSurf, TextRect = text_objects("uporzadkuj biblioteke map.",
+            TextSurf, TextRect = text_objects("Maximum amount is 20.",
                                              smallText, WHITE)
             TextRect.center = (SIZE[0]/2,SIZE[1]/5+30)
             screen.blit(TextSurf, TextRect)

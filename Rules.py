@@ -2,22 +2,20 @@ import pygame
 from pygame.locals import *
 
 def rules():
-    #Funkcja wyświetlająca zasady gry
     def text_objects(text, font, color):
-        #Funkcja tworząca obiekt tekstu
         textSurface = font.render(text, True, color)
         return textSurface, textSurface.get_rect()
     pygame.init()
-    #######Deklaracja stałych
     largeText = pygame.font.Font('freesansbold.ttf',80)
     smallText = pygame.font.Font("freesansbold.ttf",20)
-    smallTexts=['Celem gracza jest zebranie wszystkich',
-                'punktów(mała kropka) z mapy',
-                'unikając wrogich duchów.',
-                'Zebranie specjalnego punktu(duża kropka)',
-                'umożliwia niszczenie przeciwników przez ',
-                '10-15 sekund(losowo).',
-                'Sterowanie- strzałki.']
+    smallTexts=["Player's task is to collect points-",
+                "small dots on the map- and to avoid",
+                "dangerous ghosts. Picking up the special",
+                "point(big dots) changes your appearance",
+                "and allows you to 'eat' enemies for additonal",
+                "score. The effect duration is random",
+                "between 10-15 seconds.",
+                "Use arrow keys to move."]
     SIZE=(600,600)
     BLACK=(0,0,0)
     WHITE=(255,255,255)
@@ -35,16 +33,15 @@ def rules():
             if event.type==QUIT:
                 ACTIVE=False
         screen.fill(BLACK)
-        textSurf2, textRect2 = text_objects('ZASADY GRY', largeText, YELLOW)
+        textSurf2, textRect2 = text_objects('GAME RULES', largeText, YELLOW)
         textRect2.center = ( SIZE[0]/2,SIZE[1]/6 )
         screen.blit(textSurf2, textRect2)
         for i in range(len(smallTexts)):
-            #Pętla drukująca napisy
             textSurf, textRect = text_objects(smallTexts[i], smallText, WHITE)
             textRect.center = ( SIZE[1]/2,SIZE[1]/6 + 80+ i*30 )
             screen.blit(textSurf, textRect)
         pygame.draw.rect(screen,RED,(SIZE[1]/2-B_WH/2,450 + B_HT/2,B_WH,B_HT))
-        textSurf, textRect = text_objects('COFNIJ', smallText, WHITE)
+        textSurf, textRect = text_objects('BACK', smallText, WHITE)
         textRect.center = ( SIZE[1]/2,450 + B_HT)
         screen.blit(textSurf, textRect)
         mouse = pygame.mouse.get_pos()
@@ -56,5 +53,6 @@ def rules():
 
     pygame.quit()
     return 0
-
+if __name__=="__main__":
+    rules()
 
