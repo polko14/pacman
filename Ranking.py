@@ -1,10 +1,8 @@
 import pygame
 from pygame.locals import *
+from TextObjects import *
 import os
 def ranking(file):
-    def text_objects(text, font, color):
-        textSurface = font.render(text, True, color)
-        return textSurface, textSurface.get_rect()
     SIZE=(600,600)
     BLACK=(0,0,0)
     WHITE=(255,255,255)

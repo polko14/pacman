@@ -1,9 +1,7 @@
 import pygame
 from pygame.locals import *
+from TextObjects import *
 def menu():
-    def text_objects(text, font, color):
-        textSurface = font.render(text, True, color)
-        return textSurface, textSurface.get_rect()
     pygame.init()
     SIZE=(600,600)
     BLACK=(0,0,0)

@@ -1,10 +1,8 @@
 import pygame
 from pygame.locals import *
+from TextObjects import *
 
 def rules():
-    def text_objects(text, font, color):
-        textSurface = font.render(text, True, color)
-        return textSurface, textSurface.get_rect()
     pygame.init()
     largeText = pygame.font.Font('freesansbold.ttf',80)
     smallText = pygame.font.Font("freesansbold.ttf",20)
