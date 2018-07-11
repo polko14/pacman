@@ -13,7 +13,14 @@ def menu():
     ACTIVE=True
     screen=pygame.display.set_mode(SIZE)
     pygame.display.set_caption("PacMan")
+    texts=['PLAY', 'SCOREBOARD', 'MAP CREATOR','RULES', 'CLOSE']
     clock=pygame.time.Clock()
+    for i in range(0,len(texts)):
+        pygame.draw.rect(screen,RED,(SIZE[1]/2-B_WH/2,SIZE[0]/4+(3*i+1)*B_HT/2,B_WH,B_HT))
+    draw_texts(screen, "PacMan", (SIZE[0]/2-5,SIZE[1]/6-5), 115, YELLOW)
+    draw_texts(screen, "PacMan", (SIZE[0]/2,SIZE[1]/6), 115, WHITE)
+    draw_texts(screen, texts, (SIZE[1]/2,SIZE[0]/4+B_HT), 20, WHITE, spacing=3*B_HT/2)
+    pygame.display.update()
     while ACTIVE:
         clock.tick(60)
         for event in pygame.event.get():
@@ -21,23 +28,7 @@ def menu():
                 ACTIVE=False
                 pygame.quit()
                 return 7
-        screen.fill(BLACK)
-        largeText = pygame.font.Font('freesansbold.ttf',115)
-        TextSurf2, TextRect2 = text_objects("PacMan", largeText, YELLOW)
-        TextRect2.center = (SIZE[0]/2-5,SIZE[1]/6-5)
-        TextSurf, TextRect = text_objects("PacMan", largeText, WHITE)
-        TextRect.center = (SIZE[0]/2,SIZE[1]/6)
-        screen.blit(TextSurf2, TextRect2)
-        screen.blit(TextSurf, TextRect)
-        smallText = pygame.font.Font("freesansbold.ttf",20)
-        texts=['PLAY', 'SCOREBOARD', 'MAPCREATOR','RULES', 'CLOSE']
-        for i in range(0,5):
-            pygame.draw.rect(screen,RED,(SIZE[1]/2-B_WH/2,SIZE[0]/4+(3*i+1)*B_HT/2,B_WH,B_HT))
-            textSurf, textRect = text_objects(texts[i], smallText, WHITE)
-            textRect.center = ( SIZE[1]/2,SIZE[0]/4+(3*i+2)*B_HT/2 )
-            screen.blit(textSurf, textRect)
         clicked = pygame.mouse.get_pressed()
-        pygame.display.update()
         if clicked[2]:
             mouse = pygame.mouse.get_pos()
             if SIZE[1]/2+B_WH/2 > mouse[0] > SIZE[1]/2-B_WH/2 and SIZE[0]/4+3/2*B_HT > mouse[1] > SIZE[0]/4+B_HT/2:
