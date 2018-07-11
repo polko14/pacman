@@ -13,6 +13,7 @@ def level_select(n):
     RED=(255,0,0)
     B_WH=250
     B_HT=50
+    L_WH=100
     pygame.init()
     screen=pygame.display.set_mode(SIZE)
     pygame.display.set_caption("PacMan")
@@ -41,29 +42,26 @@ def level_select(n):
         if clicked[2]:
             if SIZE[1]/2+B_WH/2 > mouse[0] > SIZE[1]/2-B_WH/2 and 500+3*B_HT/2 > mouse[1] > 500-B_HT/2:
                 ACTIVE=False
-        #Fix this
-        #if len(files)<=20:
-        #    if pygame.mouse.get_pressed()[2]:
-        #        mouse=pygame.mouse.get_pos()
-        #        for i in range(int((len(files)+1)/2)):
-        #            if (SIZE[0]/4+TextRect[i].size[0]>mouse[0]>SIZE[0]/4-TextRect[i].size[0] 
-        #                and SIZE[1]/8+30+(2*i+1)*20+10>mouse[1]>SIZE[1]/8+30+(2*i+1)*20-10):
-        #                ACTIVE=False
-        #                pygame.quit()
-        #                if n==1:
-        #                    return 2,files[i]
-        #                else:
-        #                    return 4,files[i]
-        #        for i in range(int((len(files)+1)/2),len(files)):
-        #            if (SIZE[0]/4*3+TextRect[i].size[0]>mouse[0]>SIZE[0]/4*3-TextRect[i].size[0] 
-        #                and SIZE[1]/8+30+(2*(i-(len(files)+1)/2)+1)*20+10>mouse[1]
-        #                and mouse[1]>SIZE[1]/8+30+(2*(i-(len(files)+1)/2)+1)*20-10):
-        #                ACTIVE=False
-        #                pygame.quit()
-        #                if n==1:
-        #                    return 2,files[i]
-        #                else:
-        #                    return 4,files[i]
+            if len(files)<=20:
+                for i in range(int((len(files)+1)/2)):
+                    if (SIZE[0]/4+L_WH>mouse[0]>SIZE[0]/4-L_WH and
+                        SIZE[1]/8+60+i*40>mouse[1]>SIZE[1]/8+40+i*40):
+                        ACTIVE=False
+                        pygame.quit()
+                        if n==1:
+                            return 2,files[i]
+                        else:
+                            return 4,files[i]
+                for i in range(int((len(files)+1)/2),len(files)):
+                    if (SIZE[0]/4*3+L_WH>mouse[0]>SIZE[0]/4*3-L_WH and 
+                        SIZE[1]/8+60+(i-(len(files)+1)/2)*40>mouse[1] and
+                        mouse[1]>SIZE[1]/8+40+(i-(len(files)+1)/2)*40):
+                        ACTIVE=False
+                        pygame.quit()
+                        if n==1:
+                            return 2,files[i]
+                        else:
+                            return 4,files[i]
     pygame.quit()
     return 0,""
 if __name__=="__main__":
