@@ -3,7 +3,6 @@ from pygame.locals import *
 from TextObjects import *
 
 def rules():
-    pygame.init()
     smallTexts=["Player's task is to collect points-",
                 "small dots on the map- and to avoid",
                 "dangerous ghosts. Picking up the special",
@@ -19,13 +18,14 @@ def rules():
     RED=(255,0,0)
     B_WH=250
     B_HT=50
+    ACTIVE=True
+    pygame.init()
     screen=pygame.display.set_mode(SIZE)
     pygame.display.set_caption("PacMan")
     clock=pygame.time.Clock()
-    ACTIVE=True
+    pygame.draw.rect(screen,RED,(SIZE[1]/2-B_WH/2,450 + B_HT/2,B_WH,B_HT))
     draw_texts(screen, 'RULES', (SIZE[0]/2,SIZE[1]/6), 80, YELLOW)
     draw_texts(screen, smallTexts, ( SIZE[1]/2,SIZE[1]/6+80), 20, WHITE, spacing=30)
-    pygame.draw.rect(screen,RED,(SIZE[1]/2-B_WH/2,450 + B_HT/2,B_WH,B_HT))
     draw_texts(screen, 'BACK', ( SIZE[1]/2,450 + B_HT), 20, WHITE)
     pygame.display.update()
     while ACTIVE:
@@ -33,9 +33,8 @@ def rules():
         for event in pygame.event.get():
             if event.type==QUIT:
                 ACTIVE=False
-        mouse = pygame.mouse.get_pos()
-        clicked = pygame.mouse.get_pressed()
-        if clicked[2]:
+        if pygame.mouse.get_pressed()[0]:
+            mouse = pygame.mouse.get_pos()
             if SIZE[1]/2+B_WH/2 > mouse[0] > SIZE[1]/2-B_WH/2 and 450+3*B_HT/2 > mouse[1] > 450-B_HT/2:
                 ACTIVE=False
 

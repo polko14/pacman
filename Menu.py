@@ -2,7 +2,6 @@ import pygame
 from pygame.locals import *
 from TextObjects import *
 def menu():
-    pygame.init()
     SIZE=(600,600)
     BLACK=(0,0,0)
     WHITE=(255,255,255)
@@ -11,6 +10,7 @@ def menu():
     B_WH=250
     B_HT=50
     ACTIVE=True
+    pygame.init()
     screen=pygame.display.set_mode(SIZE)
     pygame.display.set_caption("PacMan")
     texts=['PLAY', 'SCOREBOARD', 'MAP CREATOR','RULES', 'CLOSE']
@@ -28,8 +28,7 @@ def menu():
                 ACTIVE=False
                 pygame.quit()
                 return 7
-        clicked = pygame.mouse.get_pressed()
-        if clicked[2]:
+        if pygame.mouse.get_pressed()[0]:
             mouse = pygame.mouse.get_pos()
             if SIZE[1]/2+B_WH/2 > mouse[0] > SIZE[1]/2-B_WH/2 and SIZE[0]/4+3/2*B_HT > mouse[1] > SIZE[0]/4+B_HT/2:
                 ACTIVE=False

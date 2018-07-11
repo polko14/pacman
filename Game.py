@@ -119,6 +119,30 @@ def game(file):
     LIVES=3
     SCORE=0
     WHITE=(255,255,255)
+    for i in range(ROWS):
+        for j in range(COLS):
+            if MAP[i+j*ROWS]=='1':
+                walls.add(Wall(i*16,j*16))
+            elif MAP[i+j*ROWS]=='2':
+                points.add(Point(i*16,j*16))
+            elif MAP[i+j*ROWS]=='3':
+                specials.add(Special(i*16,j*16))
+            elif MAP[i+j*ROWS]=='4':
+                blinky=Ghost(i*16,j*16,s_blinky)
+                ghosts.add(blinky)
+            elif MAP[i+j*ROWS]=='5':
+                pinky=Ghost(i*16,j*16,s_pinky)
+                ghosts.add(pinky)
+            elif MAP[i+j*ROWS]=='6':
+                inky=Ghost(i*16,j*16,s_inky)
+                ghosts.add(inky)
+            elif MAP[i+j*ROWS]=='7':
+                clyde=Ghost(i*16,j*16,s_clyde)
+                ghosts.add(clyde)
+            elif MAP[i+j*ROWS]=='8':
+                gracz=Pacman(i*16,j*16)
+                player_sprite.add(gracz)
+                p_pos=(i*16,j*16)
     pygame.init()
     clock=pygame.time.Clock()
     screen=pygame.display.set_mode(SIZE)
@@ -150,30 +174,6 @@ def game(file):
     scoreboard.add(ScoreBoard())
     scoreboard.draw(screen)
     pygame.display.flip()
-    for i in range(ROWS):
-        for j in range(COLS):
-            if MAP[i+j*ROWS]=='1':
-                walls.add(Wall(i*16,j*16))
-            elif MAP[i+j*ROWS]=='2':
-                points.add(Point(i*16,j*16))
-            elif MAP[i+j*ROWS]=='3':
-                specials.add(Special(i*16,j*16))
-            elif MAP[i+j*ROWS]=='4':
-                blinky=Ghost(i*16,j*16,s_blinky)
-                ghosts.add(blinky)
-            elif MAP[i+j*ROWS]=='5':
-                pinky=Ghost(i*16,j*16,s_pinky)
-                ghosts.add(pinky)
-            elif MAP[i+j*ROWS]=='6':
-                inky=Ghost(i*16,j*16,s_inky)
-                ghosts.add(inky)
-            elif MAP[i+j*ROWS]=='7':
-                clyde=Ghost(i*16,j*16,s_clyde)
-                ghosts.add(clyde)
-            elif MAP[i+j*ROWS]=='8':
-                gracz=Pacman(i*16,j*16)
-                player_sprite.add(gracz)
-                p_pos=(i*16,j*16)
     while ACTIVE:
         clock.tick(16)
         if gracz.rect.right%RES==0 and gracz.rect.top%RES==0:
@@ -227,7 +227,6 @@ def game(file):
             scoreboard.draw(screen)
             EATING=1
             EATING_TIME=random.randint(160,240)
-
         if not EATING:
             for hit in pygame.sprite.groupcollide(player_sprite,ghosts,1,0):
                 LIVES-=1

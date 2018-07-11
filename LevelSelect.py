@@ -14,15 +14,15 @@ def level_select(n):
     B_WH=250
     B_HT=50
     L_WH=100
+    ACTIVE=True
+    fullPath=os.getcwd()+"\Maps"
+    files = [f[0:-4] for f in os.listdir(fullPath) if (os.path.isfile(os.path.join(fullPath, f)) and f[-4:]==".txt")]
     pygame.init()
     screen=pygame.display.set_mode(SIZE)
     pygame.display.set_caption("PacMan")
     clock=pygame.time.Clock()
-    ACTIVE=True
-    fullPath=os.getcwd()+"\Maps"
-    files = [f[0:-4] for f in os.listdir(fullPath) if (os.path.isfile(os.path.join(fullPath, f)) and f[-4:]==".txt")]
-    draw_texts(screen, "SELECT LEVEL", (SIZE[0]/2,SIZE[1]/8), 60, WHITE)
     pygame.draw.rect(screen,RED,(SIZE[1]/2-B_WH/2,500 + B_HT/2,B_WH,B_HT))
+    draw_texts(screen, "SELECT LEVEL", (SIZE[0]/2,SIZE[1]/8), 60, WHITE)
     draw_texts(screen, "BACK", (SIZE[1]/2,500 + B_HT), 20, WHITE)
     if len(files)==0:
         draw_texts(screen, "Maps not found create some using map creator", (SIZE[0]/2,SIZE[1]/5), 20, WHITE)
@@ -37,9 +37,8 @@ def level_select(n):
         for event in pygame.event.get():
             if event.type==QUIT:
                 ACTIVE=False
-        mouse = pygame.mouse.get_pos()
-        clicked = pygame.mouse.get_pressed()
-        if clicked[2]:
+        if pygame.mouse.get_pressed[0]:
+            mouse = pygame.mouse.get_pos()
             if SIZE[1]/2+B_WH/2 > mouse[0] > SIZE[1]/2-B_WH/2 and 500+3*B_HT/2 > mouse[1] > 500-B_HT/2:
                 ACTIVE=False
             if len(files)<=20:
