@@ -65,7 +65,8 @@ def game(file):
     class Pacman(pygame.sprite.Sprite):
         def __init__(self,x,y):
             pygame.sprite.Sprite.__init__(self)
-            self.image=s_pac_right
+            self.sprites=s_pacman
+            self.image=self.sprites[2]
             self.rect = self.image.get_rect()
             self.rect.center = (x+RES/2,y+RES/2)
             self.xvel=0
@@ -119,6 +120,41 @@ def game(file):
     LIVES=3
     SCORE=0
     WHITE=(255,255,255)
+    pygame.init()
+    clock=pygame.time.Clock()
+    screen=pygame.display.set_mode(SIZE)
+    bg = pygame.Surface(SIZE)
+    bg.fill((0,0,0))
+    pygame.display.set_caption("PacMan")
+    fullPath=os.getcwd()+r"Graphics"
+    sd_point = pygame.mixer.Sound(os.getcwd()+r"\Sounds\point.wav")
+    sd_ghost = pygame.mixer.Sound(os.getcwd()+r"\Sounds\ghost.wav")
+    sd_move = pygame.mixer.Sound(os.getcwd()+r"\Sounds\move.wav")
+    s_wall = pygame.image.load(os.getcwd()+r"\Graphics\wall.gif")
+    s_point = pygame.image.load(os.getcwd()+r"\Graphics\point.gif")
+    s_special = pygame.image.load(os.getcwd()+r"\Graphics\special.gif")
+    s_blinky = pygame.image.load(os.getcwd()+r"\Graphics\blinky.gif")
+    s_pinky = pygame.image.load(os.getcwd()+r"\Graphics\pinky.gif")
+    s_inky = pygame.image.load(os.getcwd()+r"\Graphics\inky.gif")
+    s_clyde = pygame.image.load(os.getcwd()+r"\Graphics\clyde.gif")
+    s_pacman = [pygame.image.load(os.getcwd()+f"\Graphics\{f}") 
+                for f in os.listdir(os.getcwd()+r"\Graphics") if f[0:3]=="pac"]
+    s_sup_pacman = [pygame.image.load(os.getcwd()+f"\Graphics\{f}") 
+                    for f in os.listdir(os.getcwd()+r"\Graphics") if f[0:3]=="sup"]
+    s_heart = pygame.image.load(os.getcwd()+r"\Graphics\heart.gif")
+    walls=pygame.sprite.RenderClear()
+    points=pygame.sprite.RenderClear()
+    ghosts=pygame.sprite.RenderClear()
+    player_sprite=pygame.sprite.RenderClear()
+    specials=pygame.sprite.RenderClear()
+    hearts=pygame.sprite.RenderClear()
+    hearts.add(Heart(SIZE[0]-40,SIZE[1]-8))
+    hearts.add(Heart(SIZE[0]-24,SIZE[1]-8))
+    hearts.add(Heart(SIZE[0]-8,SIZE[1]-8))
+    scoreboard = pygame.sprite.RenderClear()
+    scoreboard.add(ScoreBoard())
+    scoreboard.draw(screen)
+    pygame.display.flip()
     for i in range(ROWS):
         for j in range(COLS):
             if MAP[i+j*ROWS]=='1':
@@ -140,72 +176,52 @@ def game(file):
                 clyde=Ghost(i*16,j*16,s_clyde)
                 ghosts.add(clyde)
             elif MAP[i+j*ROWS]=='8':
-                gracz=Pacman(i*16,j*16)
-                player_sprite.add(gracz)
+                player=Pacman(i*16,j*16)
+                player_sprite.add(player)
                 p_pos=(i*16,j*16)
-    pygame.init()
-    clock=pygame.time.Clock()
-    screen=pygame.display.set_mode(SIZE)
-    bg = pygame.Surface(SIZE)
-    bg.fill((0,0,0))
-    pygame.display.set_caption("PacMan")
-    sd_point = pygame.mixer.Sound(os.getcwd()+r"\Sounds\point.wav")
-    sd_ghost = pygame.mixer.Sound(os.getcwd()+r"\Sounds\ghost.wav")
-    sd_move = pygame.mixer.Sound(os.getcwd()+r"\Sounds\move.wav")
-    s_wall = pygame.image.load(os.getcwd()+r"\Graphics\wall.gif")
-    s_point = pygame.image.load(os.getcwd()+r"\Graphics\point.gif")
-    s_special = pygame.image.load(os.getcwd()+r"\Graphics\special.gif")
-    s_blinky = pygame.image.load(os.getcwd()+r"\Graphics\blinky.gif")
-    s_pinky = pygame.image.load(os.getcwd()+r"\Graphics\pinky.gif")
-    s_inky = pygame.image.load(os.getcwd()+r"\Graphics\inky.gif")
-    s_clyde = pygame.image.load(os.getcwd()+r"\Graphics\clyde.gif")
-    s_pac_right = pygame.image.load(os.getcwd()+r"\Graphics\pac_right.gif")
-    s_heart = pygame.image.load(os.getcwd()+r"\Graphics\heart.gif")
-    walls=pygame.sprite.RenderClear()
-    points=pygame.sprite.RenderClear()
-    ghosts=pygame.sprite.RenderClear()
-    player_sprite=pygame.sprite.RenderClear()
-    specials=pygame.sprite.RenderClear()
-    hearts=pygame.sprite.RenderClear()
-    hearts.add(Heart(SIZE[0]-40,SIZE[1]-8))
-    hearts.add(Heart(SIZE[0]-24,SIZE[1]-8))
-    hearts.add(Heart(SIZE[0]-8,SIZE[1]-8))
-    scoreboard = pygame.sprite.RenderClear()
-    scoreboard.add(ScoreBoard())
-    scoreboard.draw(screen)
-    pygame.display.flip()
     while ACTIVE:
         clock.tick(16)
-        if gracz.rect.right%RES==0 and gracz.rect.top%RES==0:
+        if player.rect.right%RES==0 and player.rect.top%RES==0:
             for event in pygame.event.get():
                 if event.type==QUIT:
                     ACTIVE=False
                     return 1
                 elif event.type==KEYDOWN:
                     if event.key == K_LEFT:
-                        gracz.xvel = -2
-                        gracz.yvel=0
+                        player.image=player.sprites[1]
+                        player.xvel = -2
+                        player.yvel=0
                     elif event.key == K_RIGHT:
-                        gracz.xvel = 2
-                        gracz.yvel=0
+                        player.image=player.sprites[2]
+                        player.xvel = 2
+                        player.yvel=0
                     elif event.key == K_UP:
-                        gracz.yvel = -2
-                        gracz.xvel=0
+                        player.image=player.sprites[3]
+                        player.yvel = -2
+                        player.xvel=0
                     elif event.key == K_DOWN:
-                        gracz.yvel = 2
-                        gracz.xvel=0
+                        player.image=player.sprites[0]
+                        player.yvel = 2
+                        player.xvel=0
                 elif event.type==KEYUP:
                     if event.key==K_LEFT or event.key==K_RIGHT:
-                        gracz.xvel=0
+                        player.xvel=0
                     elif event.key==K_DOWN or event.key==K_UP:
-                        gracz.yvel=0
-        if(gracz.xvel!=0 or gracz.yvel!=0):
+                        player.yvel=0
+        if(player.xvel!=0 or player.yvel!=0):
             sd_move.play()
         blinky.update()
         pinky.update()
         inky.update()
         clyde.update()
-        gracz.update()
+        player.update()
+        if EATING_TIME>0 and EATING_TIME<16:
+            if EATING_TIME%2==0:
+                player.sprites=s_sup_pacman
+                player.image=s_sup_pacman[s_pacman.index(player.image)]
+            else:
+                player.sprites=s_pacman
+                player.image=s_pacman[s_sup_pacman.index(player.image)]
         pygame.display.update()
         for hit in pygame.sprite.groupcollide(player_sprite,points,0,1):
             sd_point.play()
@@ -226,7 +242,9 @@ def game(file):
             scoreboard.clear(screen, bg)
             scoreboard.draw(screen)
             EATING=1
-            EATING_TIME=random.randint(160,240)
+            player.sprites=s_sup_pacman
+            player.image=s_sup_pacman[s_pacman.index(player.image)]
+            EATING_TIME+=random.randint(80,160)
         if not EATING:
             for hit in pygame.sprite.groupcollide(player_sprite,ghosts,1,0):
                 LIVES-=1
@@ -234,10 +252,11 @@ def game(file):
                 if LIVES<=0:
                     ACTIVE=False
                 else:
-                    gracz=Pacman(p_pos[0],p_pos[1])
-                    player_sprite.add(gracz)
+                    player=Pacman(p_pos[0],p_pos[1])
+                    player_sprite.add(player)
                 pygame.display.flip()
         else:
+            EATING_TIME-=1
             for hit in pygame.sprite.groupcollide(player_sprite,ghosts,0,1):
                 sd_ghost.play()
                 SCORE+=400
@@ -246,20 +265,25 @@ def game(file):
                 scoreboard.clear(screen, bg)
                 scoreboard.draw(screen)
                 pygame.display.flip()
-            EATING_TIME-=1
             if EATING_TIME<=0:
+                player.sprites=s_pacman
+                try:
+                    player.image=s_pacman[s_sup_pacman.index(player.image)]
+                except:
+                    pass
                 EATING=0
+                EATING_TIME=0
         for hit in pygame.sprite.groupcollide(player_sprite,walls,0,0):
-            gracz.xvel=0
-            gracz.yvel=0
-            if gracz.rect.right%RES>RES/2:
-                gracz.rect.right+=(RES-gracz.rect.right%RES)
-            elif gracz.rect.right%RES<=RES/2 and gracz.rect.right%RES>0:
-                gracz.rect.right-=gracz.rect.right%RES
-            if gracz.rect.top%RES>RES/2:
-                gracz.rect.top+=(RES-gracz.rect.top%RES)
-            elif gracz.rect.top%RES<=RES/2 and gracz.rect.top%RES>0:
-                gracz.rect.top-=gracz.rect.top%RES
+            player.xvel=0
+            player.yvel=0
+            if player.rect.right%RES>RES/2:
+                player.rect.right+=(RES-player.rect.right%RES)
+            elif player.rect.right%RES<=RES/2 and player.rect.right%RES>0:
+                player.rect.right-=player.rect.right%RES
+            if player.rect.top%RES>RES/2:
+                player.rect.top+=(RES-player.rect.top%RES)
+            elif player.rect.top%RES<=RES/2 and player.rect.top%RES>0:
+                player.rect.top-=player.rect.top%RES
         walls.clear(screen,bg)
         points.clear(screen,bg)
         specials.clear(screen,bg)
