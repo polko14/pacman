@@ -17,7 +17,7 @@ def ranking(file):
         scores=w[1].replace(" ","").replace("'","")[1:-1].split(",")
     pygame.init()
     screen=pygame.display.set_mode(SIZE)
-    pygame.display.set_caption("PacMan")
+    pygame.display.set_caption("PacMan- Ranking")
     clock=pygame.time.Clock()
     pygame.draw.rect(screen,RED,(SIZE[1]/2-B_WH/2,500 + B_HT/2,B_WH,B_HT))
     draw_texts(screen, "%s"%(file), (SIZE[0]/2,SIZE[1]/8), 90, WHITE)

@@ -19,7 +19,7 @@ def level_select(n):
     files = [f[0:-4] for f in os.listdir(fullPath) if (os.path.isfile(os.path.join(fullPath, f)) and f[-4:]==".txt")]
     pygame.init()
     screen=pygame.display.set_mode(SIZE)
-    pygame.display.set_caption("PacMan")
+    pygame.display.set_caption("PacMan- Level Select")
     clock=pygame.time.Clock()
     pygame.draw.rect(screen,RED,(SIZE[1]/2-B_WH/2,500 + B_HT/2,B_WH,B_HT))
     draw_texts(screen, "SELECT LEVEL", (SIZE[0]/2,SIZE[1]/8), 60, WHITE)
@@ -37,7 +37,7 @@ def level_select(n):
         for event in pygame.event.get():
             if event.type==QUIT:
                 ACTIVE=False
-        if pygame.mouse.get_pressed[0]:
+        if pygame.mouse.get_pressed()[0]:
             mouse = pygame.mouse.get_pos()
             if SIZE[1]/2+B_WH/2 > mouse[0] > SIZE[1]/2-B_WH/2 and 500+3*B_HT/2 > mouse[1] > 500-B_HT/2:
                 ACTIVE=False
@@ -51,16 +51,15 @@ def level_select(n):
                             return 2,files[i]
                         else:
                             return 4,files[i]
-                for i in range(int((len(files)+1)/2),len(files)):
-                    if (SIZE[0]/4*3+L_WH>mouse[0]>SIZE[0]/4*3-L_WH and 
-                        SIZE[1]/8+60+(i-(len(files)+1)/2)*40>mouse[1] and
-                        mouse[1]>SIZE[1]/8+40+(i-(len(files)+1)/2)*40):
+                for i in range(int((len(files)+1)/2)):
+                    if (3*SIZE[0]/4+L_WH>mouse[0]>3*SIZE[0]/4-L_WH and 
+                        SIZE[1]/8+60+i*40>mouse[1]>SIZE[1]/8+40+i*40):
                         ACTIVE=False
                         pygame.quit()
                         if n==1:
-                            return 2,files[i]
+                            return 2,files[i+int((len(files)+1)/2)]
                         else:
-                            return 4,files[i]
+                            return 4,files[i+int((len(files)+1)/2)]
     pygame.quit()
     return 0,""
 if __name__=="__main__":

@@ -3,7 +3,8 @@ import os
 def mapcreator():
     def export(*args):
         with open(os.getcwd()+"\Maps\%s.txt"%name.get(),"w") as f:
-            f.write(str(xsize.get())+";"+str(xsize.get())+";"+str(board)+";"+str(["....."]*10)+";"+str(["0"]*10))
+            f.write(str(rows.get())+";"+str(cols.get())+";"+
+                    str(board)+";"+str(["....."]*10)+";"+str(["0"]*10))
     def checknr(arg,*args):
         x=0
         if(str(arg)[-1]=="n"):
@@ -52,7 +53,7 @@ def mapcreator():
                 tiles[i].config(bg = 'magenta')
     def sketch(*args):
         global board
-        board=[0]*xsize.get()*xsize.get()
+        board=[0]*rows.get()*cols.get()
         return board
     def draw(*args):
         sketch()
@@ -64,20 +65,22 @@ def mapcreator():
             pass
         buttons=tk.Frame(frame)
         buttons.grid(column=10, row = 3)
-        tiles=[0]*xsize.get()*xsize.get()
-        while (str(xsize.get())[0]==0): 
-            xsize.set(str(xsize.get()[1:]))
-        for j in range(xsize.get()):
-            for i in range(xsize.get()):
-                if(i==0 or j==0 or i==xsize.get()-1 or j==xsize.get()-1):
-                    tiles[i+(xsize.get())*j]=tk.Button(buttons,image=pixel,bg = 'blue')
-                    tiles[i+(xsize.get())*j].config(command = lambda arg = tiles[i+(xsize.get())*j]: change(arg))
-                    tiles[i+(xsize.get())*j].grid(column=i ,row = j)
-                    board[i+(xsize.get())*j]=1
+        tiles=[0]*rows.get()*cols.get()
+        while (str(rows.get())[0]==0): 
+            rows.set(str(rows.get()[1:]))
+        while (str(cols.get())[0]==0): 
+            cols.set(str(cols.get()[1:]))
+        for row in range(rows.get()):
+            for col in range(cols.get()):
+                if(row==0 or col==0 or row==rows.get()-1 or col==cols.get()-1):
+                    tiles[col+(cols.get())*row]=tk.Button(buttons,image=pixel,bg = 'blue')
+                    tiles[col+(cols.get())*row].config(command = lambda arg = tiles[col+(cols.get())*row]: change(arg))
+                    tiles[col+(cols.get())*row].grid(column=col ,row = row)
+                    board[col+(cols.get())*row]=1
                 else:
-                    tiles[i+(xsize.get())*j]=tk.Button(buttons,image=pixel,bg = 'white')
-                    tiles[i+(xsize.get())*j].config(command = lambda arg = tiles[i+(xsize.get())*j]: change(arg))
-                    tiles[i+(xsize.get())*j].grid(column=i ,row = j)
+                    tiles[col+(cols.get())*row]=tk.Button(buttons,image=pixel,bg = 'white')
+                    tiles[col+(cols.get())*row].config(command = lambda arg = tiles[col+(cols.get())*row]: change(arg))
+                    tiles[col+(cols.get())*row].grid(column=col ,row = row)
     def change_mode(n,*args):
         if n==1:
             mode.set(1)
@@ -106,19 +109,26 @@ def mapcreator():
     top.title("Map creator for PacMan")
     frame=tk.Frame(top)
     frame.grid(column=0,row=0)
-    xsize=tk.IntVar(frame)
-    xsize.set(20)
+    rows=tk.IntVar(frame)
+    rows.set(20)
+    cols=tk.IntVar(frame)
+    cols.set(20)
     mode=tk.IntVar(frame)
     name=tk.StringVar(frame)
     name.set("levelname")
     mode.set(1)
-
+    
     l_size=tk.Label(frame,text="Map size: ")
     l_size.grid(column=1,row=1)
 
-    e_xsize=tk.Entry(frame,width=8,textvariable=xsize)
-    e_xsize.grid(column=2,row = 1)
-
+    l_size=tk.Label(frame,text="x")
+    l_size.grid(column=3,row=1)
+    
+    e_rows=tk.Entry(frame,width=8,textvariable=rows)
+    e_rows.grid(column=2,row = 1)
+    
+    e_cols=tk.Entry(frame,width=8,textvariable=cols)
+    e_cols.grid(column=4,row = 1)
 
     b_draw=tk.Button(frame, text = "draw", command = draw)
     b_draw.grid(column= 5, row = 1)

@@ -12,7 +12,7 @@ def menu():
     ACTIVE=True
     pygame.init()
     screen=pygame.display.set_mode(SIZE)
-    pygame.display.set_caption("PacMan")
+    pygame.display.set_caption("PacMan- Menu")
     texts=['PLAY', 'SCOREBOARD', 'MAP CREATOR','RULES', 'CLOSE']
     clock=pygame.time.Clock()
     for i in range(0,len(texts)):

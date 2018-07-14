@@ -21,7 +21,7 @@ def rules():
     ACTIVE=True
     pygame.init()
     screen=pygame.display.set_mode(SIZE)
-    pygame.display.set_caption("PacMan")
+    pygame.display.set_caption("PacMan- Rules")
     clock=pygame.time.Clock()
     pygame.draw.rect(screen,RED,(SIZE[1]/2-B_WH/2,450 + B_HT/2,B_WH,B_HT))
     draw_texts(screen, 'RULES', (SIZE[0]/2,SIZE[1]/6), 80, YELLOW)

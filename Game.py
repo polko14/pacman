@@ -52,7 +52,7 @@ def game(file):
                 if d==2:
                     self.xvel=0
                     self.yvel=2
-                    if self.rect.bottom+self.yvel>SIZE[0]-RES:
+                    if self.rect.bottom+self.yvel>SIZE[0]-3*RES:
                         self.yvel*=-1
                 if d==3:
                     self.xvel=0
@@ -114,7 +114,7 @@ def game(file):
     MAP=w[2][1:-1].replace(' ','').split(',')
     RES=16
     ACTIVE=True
-    SIZE=(ROWS*RES,(COLS+2)*RES)
+    SIZE=(COLS*RES,(ROWS+2)*RES)
     EATING=0
     EATING_TIME=0
     LIVES=3
@@ -125,7 +125,7 @@ def game(file):
     screen=pygame.display.set_mode(SIZE)
     bg = pygame.Surface(SIZE)
     bg.fill((0,0,0))
-    pygame.display.set_caption("PacMan")
+    pygame.display.set_caption("PacMan- Game")
     fullPath=os.getcwd()+r"Graphics"
     sd_point = pygame.mixer.Sound(os.getcwd()+r"\Sounds\point.wav")
     sd_ghost = pygame.mixer.Sound(os.getcwd()+r"\Sounds\ghost.wav")
@@ -155,30 +155,30 @@ def game(file):
     scoreboard.add(ScoreBoard())
     scoreboard.draw(screen)
     pygame.display.flip()
-    for i in range(ROWS):
-        for j in range(COLS):
-            if MAP[i+j*ROWS]=='1':
-                walls.add(Wall(i*16,j*16))
-            elif MAP[i+j*ROWS]=='2':
-                points.add(Point(i*16,j*16))
-            elif MAP[i+j*ROWS]=='3':
-                specials.add(Special(i*16,j*16))
-            elif MAP[i+j*ROWS]=='4':
-                blinky=Ghost(i*16,j*16,s_blinky)
+    for row in range(ROWS):
+        for col in range(COLS):
+            if MAP[col+COLS*row]=='1':
+                walls.add(Wall(col*16,row*16))
+            elif MAP[col+COLS*row]=='2':
+                points.add(Point(col*16,row*16))
+            elif MAP[col+COLS*row]=='3':
+                specials.add(Special(col*16,row*16))
+            elif MAP[col+COLS*row]=='4':
+                blinky=Ghost(col*16,row*16,s_blinky)
                 ghosts.add(blinky)
-            elif MAP[i+j*ROWS]=='5':
-                pinky=Ghost(i*16,j*16,s_pinky)
+            elif MAP[col+COLS*row]=='5':
+                pinky=Ghost(col*16,row*16,s_pinky)
                 ghosts.add(pinky)
-            elif MAP[i+j*ROWS]=='6':
-                inky=Ghost(i*16,j*16,s_inky)
+            elif MAP[col+COLS*row]=='6':
+                inky=Ghost(col*16,row*16,s_inky)
                 ghosts.add(inky)
-            elif MAP[i+j*ROWS]=='7':
-                clyde=Ghost(i*16,j*16,s_clyde)
+            elif MAP[col+COLS*row]=='7':
+                clyde=Ghost(col*16,row*16,s_clyde)
                 ghosts.add(clyde)
-            elif MAP[i+j*ROWS]=='8':
-                player=Pacman(i*16,j*16)
+            elif MAP[col+COLS*row]=='8':
+                player=Pacman(col*16,row*16)
                 player_sprite.add(player)
-                p_pos=(i*16,j*16)
+                p_pos=(col*16,row*16)
     while ACTIVE:
         clock.tick(16)
         if player.rect.right%RES==0 and player.rect.top%RES==0:
