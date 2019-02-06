@@ -8,7 +8,7 @@ from math import ceil, floor
 
 def game(file):
     def save(*args):
-        with open(os.getcwd()+"\Maps\%s.txt" % file, "r") as f:
+        with open(os.path.join(os.getcwd(), "Maps", f"{file}.txt"), "r") as f:
             w = f.readlines()[0].split(";")
         names = w[-2].replace(" ", "").replace("'", "")[1:-1].split(",")
         scores = w[-1].replace(" ", "").replace("'", "")[1:-1].split(",")
@@ -21,7 +21,7 @@ def game(file):
                 scores = scores[:-1]
                 break
         scores = [str(scores[i]) for i in range(len(scores))]
-        with open(os.getcwd()+"\Maps\%s.txt" % file, "w") as f:
+        with open(os.path.join(os.getcwd(), "Maps", f"{file}.txt"), "w") as f:
             f.write(w[0]+";"+w[1]+";"+w[2]+";"+str(names)+";"+str(scores))
         top.destroy()
 
@@ -119,7 +119,7 @@ def game(file):
             self.image = self.font.render(self.text, 1, WHITE)
             self.rect = self.image.get_rect()
             self.rect.center = (self.rect.size[0]/2, SIZE[1]-16)
-    with open(os.getcwd()+"\Maps\%s.txt" % file, "r") as f:
+    with open(os.path.join(os.getcwd(), "Maps", f"{file}.txt"), "r") as f:
         w = f.readlines()[0].split(";")[:3]
     ROWS = int(w[0])
     COLS = int(w[1])
@@ -132,30 +132,42 @@ def game(file):
     LIVES = 3
     SCORE = 0
     WHITE = (255, 255, 255)
-    pygame.init()
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode(SIZE)
     bg = pygame.Surface(SIZE)
     bg.fill((0, 0, 0))
     pygame.display.set_caption("PacMan- Game")
-    fullPath = os.getcwd()+r"Graphics"
-    sd_point = pygame.mixer.Sound(os.getcwd()+r"\Sounds\point.wav")
-    sd_ghost = pygame.mixer.Sound(os.getcwd()+r"\Sounds\ghost.wav")
-    sd_move = pygame.mixer.Sound(os.getcwd()+r"\Sounds\move.wav")
-    s_wall = pygame.image.load(os.getcwd()+r"\Graphics\wall.gif")
-    s_point = pygame.image.load(os.getcwd()+r"\Graphics\point.gif")
-    s_special = pygame.image.load(os.getcwd()+r"\Graphics\special.gif")
-    s_blinky = pygame.image.load(os.getcwd()+r"\Graphics\blinky.gif")
-    s_pinky = pygame.image.load(os.getcwd()+r"\Graphics\pinky.gif")
-    s_inky = pygame.image.load(os.getcwd()+r"\Graphics\inky.gif")
-    s_clyde = pygame.image.load(os.getcwd()+r"\Graphics\clyde.gif")
-    s_pacman = ([pygame.image.load(os.getcwd()+f"\Graphics\{f}")
-                 for f in os.listdir(os.getcwd()+r"\Graphics") if
-                 f[0:3] == "pac"])
-    s_sup_pacman = ([pygame.image.load(os.getcwd()+f"\Graphics\{f}")
-                     for f in os.listdir(os.getcwd()+r"\Graphics") if
-                     f[0:3] == "sup"])
-    s_heart = pygame.image.load(os.getcwd()+r"\Graphics\heart.gif")
+
+    sd_point = pygame.mixer.Sound(
+        os.path.join(os.getcwd(), "Sounds", "point.wav"))
+    sd_ghost = pygame.mixer.Sound(
+        os.path.join(os.getcwd(), "Sounds", "ghost.wav"))
+    sd_move = pygame.mixer.Sound(
+        os.path.join(os.getcwd(), "Sounds", "move.wav"))
+    s_wall = pygame.image.load(os.path.join(
+        os.getcwd(), "Graphics", "wall.gif"))
+    s_point = pygame.image.load(os.path.join(
+        os.getcwd(), "Graphics", "point.gif"))
+    s_special = pygame.image.load(os.path.join(
+        os.getcwd(), "Graphics", "special.gif"))
+    s_blinky = pygame.image.load(os.path.join(
+        os.getcwd(), "Graphics", "blinky.gif"))
+    s_pinky = pygame.image.load(os.path.join(
+        os.getcwd(), "Graphics", "pinky.gif"))
+    s_inky = pygame.image.load(os.path.join(
+        os.getcwd(), "Graphics", "inky.gif"))
+    s_clyde = pygame.image.load(os.path.join(
+        os.getcwd(), "Graphics", "clyde.gif"))
+    s_pacman = ([pygame.image.load(
+        os.path.join(os.getcwd(), "Graphics", f"{f}"))
+        for f in os.listdir(os.path.join(os.getcwd(), "Graphics")) if
+        f[0:3] == "pac"])
+    s_sup_pacman = ([pygame.image.load(
+        os.path.join(os.getcwd(), "Graphics", f"{f}"))
+        for f in os.listdir(os.path.join(os.getcwd(), "Graphics")) if
+        f[0:3] == "sup"])
+    s_heart = pygame.image.load(os.path.join(
+        os.getcwd(), "Graphics", "heart.gif"))
     walls = pygame.sprite.RenderClear()
     points = pygame.sprite.RenderClear()
     ghosts = pygame.sprite.RenderClear()
@@ -312,7 +324,6 @@ def game(file):
         ghosts.draw(screen)
         player_sprite.draw(screen)
         hearts.draw(screen)
-    pygame.quit()
     top = tk.Tk()
     top.title("Save results")
     frame = tk.Frame(top)
@@ -332,4 +343,6 @@ def game(file):
 
 
 if __name__ == "__main__":
+    pygame.init()
     game("level1")
+    pygame.quti()

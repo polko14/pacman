@@ -16,10 +16,9 @@ def level_select(n):
     B_HT = 50
     L_WH = 100
     ACTIVE = True
-    fullPath = os.getcwd()+"\Maps"
+    fullPath = os.path.join(os.getcwd(), "Maps")
     files = [f[0:-4] for f in os.listdir(fullPath) if (
         os.path.isfile(os.path.join(fullPath, f)) and f[-4:] == ".txt")]
-    pygame.init()
     screen = pygame.display.set_mode(SIZE)
     pygame.display.set_caption("PacMan- Level Select")
     clock = pygame.time.Clock()
@@ -54,7 +53,6 @@ def level_select(n):
                     if (SIZE[0]/4+L_WH > mouse[0] > SIZE[0]/4-L_WH and
                             SIZE[1]/8+60+i*40 > mouse[1] > SIZE[1]/8+40+i*40):
                         ACTIVE = False
-                        pygame.quit()
                         if n == 1:
                             return 2, files[i]
                         else:
@@ -63,14 +61,14 @@ def level_select(n):
                     if (3*SIZE[0]/4+L_WH > mouse[0] > 3*SIZE[0]/4-L_WH and
                             SIZE[1]/8+60+i*40 > mouse[1] > SIZE[1]/8+40+i*40):
                         ACTIVE = False
-                        pygame.quit()
                         if n == 1:
                             return 2, files[i+int((len(files)+1)/2)]
                         else:
                             return 4, files[i+int((len(files)+1)/2)]
-    pygame.quit()
     return 0, ""
 
 
 if __name__ == "__main__":
+    pygame.init()
     level_select(1)
+    pygame.quit()

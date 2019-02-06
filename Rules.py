@@ -20,7 +20,6 @@ def rules():
     B_WH = 250
     B_HT = 50
     ACTIVE = True
-    pygame.init()
     screen = pygame.display.set_mode(SIZE)
     pygame.display.set_caption("PacMan- Rules")
     clock = pygame.time.Clock()
@@ -40,10 +39,10 @@ def rules():
             if (SIZE[1]/2+B_WH/2 > mouse[0] > SIZE[1]/2-B_WH/2 and
                     450+3*B_HT/2 > mouse[1] > 450-B_HT/2):
                 ACTIVE = False
-
-    pygame.quit()
     return 0
 
 
 if __name__ == "__main__":
+    pygame.init()
     rules()
+    pygame.quit()

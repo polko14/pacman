@@ -17,6 +17,7 @@ EXIT = 7
 RULES = 8
 CURRENT = MENU
 FILE = ""
+pygame.init()
 while PLAYING:
     if CURRENT == MENU:
         CURRENT = menu()
@@ -35,3 +36,4 @@ while PLAYING:
         CURRENT = MENU
     if CURRENT == EXIT:
         PLAYING = False
+pygame.quit()

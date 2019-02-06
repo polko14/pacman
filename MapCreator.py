@@ -4,7 +4,8 @@ import os
 
 def mapcreator():
     def export(*args):
-        with open(os.getcwd()+"\Maps\%s.txt" % name.get(), "w") as f:
+        with open(os.path.join(os.getcwd(),
+                               "Maps", f"{name.get()}.txt"), "w") as f:
             f.write(str(rows.get())+";"+str(cols.get())+";" +
                     str(board)+";"+str(["....."]*10)+";"+str(["0"]*10))
 

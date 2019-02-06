@@ -12,7 +12,6 @@ def menu():
     B_WH = 250
     B_HT = 50
     ACTIVE = True
-    pygame.init()
     screen = pygame.display.set_mode(SIZE)
     pygame.display.set_caption("PacMan- Menu")
     texts = ['PLAY', 'SCOREBOARD', 'MAP CREATOR', 'RULES', 'CLOSE']
@@ -31,32 +30,32 @@ def menu():
         for event in pygame.event.get():
             if event.type == QUIT:
                 ACTIVE = False
-                pygame.quit()
                 return 7
         if pygame.mouse.get_pressed()[0]:
             mouse = pygame.mouse.get_pos()
             if (SIZE[1]/2+B_WH/2 > mouse[0] > SIZE[1]/2-B_WH/2 and
                     SIZE[0]/4+3/2*B_HT > mouse[1] > SIZE[0]/4+B_HT/2):
                 ACTIVE = False
-                pygame.quit()
                 return 1
             elif (SIZE[1]/2+B_WH/2 > mouse[0] > SIZE[1]/2-B_WH/2 and
                   SIZE[0]/4+6/2*B_HT > mouse[1] > SIZE[0]/4+4*B_HT/2):
                 ACTIVE = False
-                pygame.quit()
                 return 3
             elif (SIZE[1]/2+B_WH/2 > mouse[0] > SIZE[1]/2-B_WH/2 and
                   SIZE[0]/4+9/2*B_HT > mouse[1] > SIZE[0]/4+7*B_HT/2):
                 ACTIVE = False
-                pygame.quit()
                 return 6
             elif (SIZE[1]/2+B_WH/2 > mouse[0] > SIZE[1]/2-B_WH/2 and
                   SIZE[0]/4+12/2*B_HT > mouse[1] > SIZE[0]/4+10*B_HT/2):
                 ACTIVE = False
-                pygame.quit()
                 return 8
             elif (SIZE[1]/2+B_WH/2 > mouse[0] > SIZE[1]/2-B_WH/2 and
                   SIZE[0]/4+15/2*B_HT > mouse[1] > SIZE[0]/4+13*B_HT/2):
                 ACTIVE = False
-                pygame.quit()
                 return 7
+
+
+if __name__ == "__main__":
+    pygame.init()
+    menu()
+    pygame.quti()

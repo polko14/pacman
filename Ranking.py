@@ -13,11 +13,10 @@ def ranking(file):
     B_WH = 250
     B_HT = 50
     ACTIVE = True
-    with open(os.getcwd()+"\Maps\%s.txt" % file, "r") as f:
+    with open(os.path.join(os.getcwd(), "Maps", f"{file}.txt"), "r") as f:
         w = f.readlines()[0].split(";")[-2:]
         names = w[0].replace(" ", "").replace("'", "")[1:-1].split(",")
         scores = w[1].replace(" ", "").replace("'", "")[1:-1].split(",")
-    pygame.init()
     screen = pygame.display.set_mode(SIZE)
     pygame.display.set_caption("PacMan- Ranking")
     clock = pygame.time.Clock()
@@ -38,9 +37,10 @@ def ranking(file):
             if (SIZE[1]/2+B_WH/2 > mouse[0] > SIZE[1]/2-B_WH/2 and
                     500+3*B_HT/2 > mouse[1] > 500-B_HT/2):
                 ACTIVE = False
-    pygame.quit()
     return 3
 
 
 if __name__ == "__main__":
+    pygame.init()
     ranking("level1")
+    pygame.quit()
