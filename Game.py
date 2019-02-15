@@ -38,35 +38,56 @@ def game(file):
             self.image = s_image
             self.rect = self.image.get_rect()
             self.rect.center = (x+RES/2, y+RES/2)
+            self.start_pos = self.rect.center
             self.xvel = 0
             self.yvel = 0
+            self.dead = False
+            self.immune = False
+            self.timer = 0
 
         def update(self):
-            if self.rect.right % RES == 0 and self.rect.bottom % RES == 0:
-                d = random.randint(0, 3)
-                if d == 0:
-                    self.xvel = 2
-                    self.yvel = 0
-                    if self.rect.right+self.xvel > SIZE[0]-RES:
-                        self.xvel *= -1
-                if d == 1:
-                    self.xvel = -2
-                    self.yvel = 0
-                    if self.rect.left+self.xvel < RES:
-                        self.xvel *= -1
-                if d == 2:
-                    self.xvel = 0
-                    self.yvel = 2
-                    if self.rect.bottom+self.yvel > SIZE[0]-3*RES:
-                        self.yvel *= -1
-                if d == 3:
-                    self.xvel = 0
-                    self.yvel = -2
-                    if self.rect.top+self.yvel < RES:
-                        self.yvel *= -1
-            self.rect.centerx += self.xvel
-            self.rect.centery += self.yvel
-            self.rect.move_ip((self.xvel, self.yvel))
+            if not self.dead:
+                if self.rect.right % RES == 0 and self.rect.bottom % RES == 0:
+                    d = random.randint(0, 3)
+                    if d == 0:
+                        self.xvel = 2
+                        self.yvel = 0
+                        if self.rect.right+self.xvel > SIZE[0]-RES:
+                            self.xvel *= -1
+                    if d == 1:
+                        self.xvel = -2
+                        self.yvel = 0
+                        if self.rect.left+self.xvel < RES:
+                            self.xvel *= -1
+                    if d == 2:
+                        self.xvel = 0
+                        self.yvel = 2
+                        if self.rect.bottom+self.yvel > SIZE[0]-3*RES:
+                            self.yvel *= -1
+                    if d == 3:
+                        self.xvel = 0
+                        self.yvel = -2
+                        if self.rect.top+self.yvel < RES:
+                            self.yvel *= -1
+                self.rect.centerx += self.xvel
+                self.rect.centery += self.yvel
+                self.rect.move_ip((self.xvel, self.yvel))
+                if self.timer > 0:
+                    self.timer -= 1
+                    if self.timer == 0:
+                        self.immune = False
+            else:
+                if self.timer > 0:
+                    self.timer -= 1
+                    if self.timer == 0:
+                        self.dead = False
+                        self.timer = 32
+
+        def die(self):
+            self.dead = True
+            self.immune = True
+            self.timer = 16
+            self.rect.center = self.start_pos
 
     class Pacman(pygame.sprite.Sprite):
         def __init__(self, x, y):
@@ -77,11 +98,19 @@ def game(file):
             self.rect.center = (x+RES/2, y+RES/2)
             self.xvel = 0
             self.yvel = 0
+            self.start_pos = self.rect.center
+            self.immune = False
+            self.timer = 0
 
         def update(self):
             self.rect.centerx += self.xvel
             self.rect.centery += self.yvel
             self.rect.move_ip((self.xvel, self.yvel))
+
+        def respawn(self):
+            self.rect.center = self.start_pos
+            self.immune = True
+            self.timer = 48
 
     class Point(pygame.sprite.Sprite):
         def __init__(self, x, y):
@@ -204,7 +233,6 @@ def game(file):
             elif MAP[col+COLS*row] == '8':
                 player = Pacman(col*16, row*16)
                 player_sprite.add(player)
-                p_pos = (col*16, row*16)
     while ACTIVE:
         clock.tick(16)
         if player.rect.right % RES == 0 and player.rect.top % RES == 0:
@@ -241,7 +269,7 @@ def game(file):
         inky.update()
         clyde.update()
         player.update()
-        if EATING_TIME > 0 and EATING_TIME < 16:
+        if EATING_TIME > 0 and EATING_TIME < 32:
             if EATING_TIME % 2 == 0:
                 player.sprites = s_sup_pacman
                 player.image = s_sup_pacman[s_pacman.index(player.image)]
@@ -272,26 +300,21 @@ def game(file):
             if player.image in s_pacman:
                 player.image = s_sup_pacman[s_pacman.index(player.image)]
             EATING_TIME += random.randint(80, 160)
-        if not EATING:
-            for hit in pygame.sprite.groupcollide(player_sprite, ghosts, 1, 0):
-                LIVES -= 1
-                hearts.remove(hearts.sprites()[LIVES])
-                if LIVES <= 0:
-                    ACTIVE = False
-                else:
-                    player = Pacman(p_pos[0], p_pos[1])
-                    player_sprite.add(player)
-                pygame.display.flip()
-        else:
+        if EATING:
             EATING_TIME -= 1
-            for hit in pygame.sprite.groupcollide(player_sprite, ghosts, 0, 1):
-                sd_ghost.play()
-                SCORE += 400
-                scoreboard.sprites()[0].score += 400
-                scoreboard.update()
-                scoreboard.clear(screen, bg)
-                scoreboard.draw(screen)
-                pygame.display.flip()
+            collisions = pygame.sprite.groupcollide(
+                player_sprite, ghosts, 0, 0)
+            for collision in collisions:
+                for enemy in collisions[collision]:
+                    if not enemy.immune:
+                        enemy.die()
+                        sd_ghost.play()
+                        SCORE += 400
+                        scoreboard.sprites()[0].score += 400
+                        scoreboard.update()
+                        scoreboard.clear(screen, bg)
+                        scoreboard.draw(screen)
+                        pygame.display.flip()
             if EATING_TIME <= 0:
                 player.sprites = s_pacman
                 try:
@@ -300,6 +323,19 @@ def game(file):
                     pass
                 EATING = 0
                 EATING_TIME = 0
+        elif not EATING and not player.immune:
+            for hit in pygame.sprite.groupcollide(player_sprite, ghosts, 0, 0):
+                LIVES -= 1
+                hearts.remove(hearts.sprites()[LIVES])
+                if LIVES <= 0:
+                    ACTIVE = False
+                else:
+                    player.respawn()
+                pygame.display.flip()
+        if player.immune:
+            player.timer -= 1
+            if player.timer == 0:
+                player.immune = False
         for hit in pygame.sprite.groupcollide(player_sprite, walls, 0, 0):
             player.xvel = 0
             player.yvel = 0
@@ -345,4 +381,4 @@ def game(file):
 if __name__ == "__main__":
     pygame.init()
     game("level1")
-    pygame.quti()
+    pygame.quit()
