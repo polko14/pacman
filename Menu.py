@@ -58,4 +58,4 @@ def menu():
 if __name__ == "__main__":
     pygame.init()
     menu()
-    pygame.quti()
+    pygame.quit()
